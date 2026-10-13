@@ -81,9 +81,11 @@ Copy-Item (Join-Path $ProjectRoot 'src\vscode\media\icon.svg') (Join-Path $extTa
 $userExt = Join-Path $env:USERPROFILE '.vscode\extensions'
 $officialExt = Get-ChildItem $userExt -Directory -Filter 'openai.chatgpt-*' | Select-Object -First 1
 if ($officialExt) {
-    # 官方扩展 webview 打会话轮询补丁
+    # 官方扩展 webview 打会话轮询+筛选补丁
     python (Join-Path $ProjectRoot 'src\patch\patch-webview-poll.py') (Join-Path $officialExt.FullName 'webview\assets') 2>$null
-    Write-Host "官方扩展 webview 补丁: $($officialExt.Name)"
+    # 官方扩展宿主侧 CSP 放行 127.0.0.1:8391(筛选元数据拉取)
+    python (Join-Path $ProjectRoot 'src\patch\patch-ext-csp.py') $officialExt.FullName 2>$null
+    Write-Host "官方扩展 webview + CSP 补丁: $($officialExt.Name)"
 }
 
 $shell = New-Object -ComObject WScript.Shell

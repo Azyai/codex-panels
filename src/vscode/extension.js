@@ -286,53 +286,15 @@ class ThreadsTreeProvider {
   }
 }
 
-async function fetchProjects() {
-  try {
-    const res = await fetch(BACKEND + '/projects', { signal: AbortSignal.timeout(6000) });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
-}
-
-// 会话列表的项目筛选:当前项目 / 所有项目 / 普通对话(不属于任何项目)
-const FILTER_STATE_KEY = 'codex-panels.threadFilter';
-const FILTER_LABELS = { current: '当前项目', all: '所有项目', plain: '普通对话' };
-
-function applyFilter(threads, filter, projectsInfo, workspaceRoot) {
-  if (!filter || filter === 'all') return threads;
-  const norm = (p) => String(p || '').replace(/[\\/]+/g, '/').toLowerCase().replace(/\/$/, '');
-  if (filter === 'current') {
-    const root = norm(workspaceRoot);
-    return (threads || []).filter((t) => root && norm(t.cwd) === root);
-  }
-  // plain:没有归属任何 Codex 项目
-  const assignments = (projectsInfo && projectsInfo.assignments) || {};
-  return (threads || []).filter((t) => !assignments[t.id]);
-}
-
 function activate(context) {
-  // 实时会话树视图(带项目筛选)
+  // 实时会话树视图
   const treeProvider = new ThreadsTreeProvider();
   const treeView = vscode.window.createTreeView('codex-panels.threads', { treeDataProvider: treeProvider });
   context.subscriptions.push(treeView);
 
-  let currentProjectsInfo = null;
-  const getFilter = () => context.workspaceState.get(FILTER_STATE_KEY) || 'all';
-
   const refreshTree = async () => {
-    const [threads, projectsInfo] = await Promise.all([fetchThreads(), fetchProjects()]);
-    if (projectsInfo) currentProjectsInfo = projectsInfo;
-    if (threads && threads.length) {
-      const workspaceRoot =
-        vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders[0]
-          ? vscode.workspace.workspaceFolders[0].uri.fsPath
-          : '';
-      const filtered = applyFilter(threads, getFilter(), currentProjectsInfo, workspaceRoot);
-      treeProvider.refresh(filtered);
-      treeView.description = FILTER_LABELS[getFilter()] + ' · ' + filtered.length + '/' + threads.length;
-    }
+    const threads = await fetchThreads();
+    if (threads && threads.length) treeProvider.refresh(threads);
   };
   refreshTree();
 
@@ -351,24 +313,9 @@ function activate(context) {
   };
   reportRoot();
   context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(reportRoot));
-
-  // 筛选切换(树视图标题栏的筛选按钮触发)
-  context.subscriptions.push(
-    vscode.commands.registerCommand('codex-panels.setThreadFilter', async () => {
-      const picked = await vscode.window.showQuickPick(
-        [
-          { label: '当前项目', description: '只显示与当前工作区匹配的会话', value: 'current' },
-          { label: '所有项目', description: '显示全部会话', value: 'all' },
-          { label: '普通对话', description: '只显示不属于任何项目的会话', value: 'plain' },
-        ],
-        { placeHolder: '筛选会话列表(当前:' + FILTER_LABELS[getFilter()] + ')' }
-      );
-      if (picked) {
-        await context.workspaceState.update(FILTER_STATE_KEY, picked.value);
-        refreshTree();
-      }
-    })
-  );
+  // 后端重启会丢工作区根目录,定时补报(官方扩展 webview 的会话筛选依赖它)
+  const rootReportTimer = setInterval(reportRoot, 30000);
+  context.subscriptions.push({ dispose: () => clearInterval(rootReportTimer) });
 
   // 树视图点击 = 接续该会话
   context.subscriptions.push(

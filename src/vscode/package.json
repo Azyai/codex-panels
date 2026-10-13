@@ -84,20 +84,7 @@
       {
         "command": "codex-panels.focusCodex",
         "title": "Codex: 返回 Codex 主窗口"
-      },
-      {
-        "command": "codex-panels.setThreadFilter",
-        "title": "Codex: 筛选会话列表(当前项目/所有项目/普通对话)"
       }
-    ],
-    "menus": {
-      "view/title": [
-        {
-          "command": "codex-panels.setThreadFilter",
-          "when": "view == codex-panels.threads",
-          "group": "navigation@1"
-        }
-      ]
-    }
+    ]
   }
 }
