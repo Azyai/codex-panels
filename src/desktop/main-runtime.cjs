@@ -432,6 +432,7 @@ ipcMain.handle('codex-panels:focus-codex', () => {
 // 5. 聊天后端:app-server 客户端 + HTTP/SSE 服务(给 VS Code 扩展用)
 // ---------------------------------------------------------------------------
 let chatApi = null;
+let workspaceRoot = '';
 try {
   const chatModule = path.join(RUNTIME_DIR, 'chat.cjs');
   if (fs.existsSync(chatModule)) {
@@ -455,6 +456,24 @@ function startChatHttpServer() {
     if (!chatApi) {
       res.writeHead(503, { 'content-type': 'application/json' });
       res.end(JSON.stringify({ error: 'chat 后端不可用' }));
+      return;
+    }
+    if (req.method === 'POST' && req.url.startsWith('/workspace-root')) {
+      let body = '';
+      req.on('data', (c) => (body += c));
+      req.on('end', () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          if (payload.root) workspaceRoot = payload.root;
+        } catch {}
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+      });
+      return;
+    }
+    if (req.method === 'GET' && req.url.startsWith('/workspace-root')) {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ root: workspaceRoot }));
       return;
     }
     if (req.method === 'GET' && req.url.startsWith('/projects')) {

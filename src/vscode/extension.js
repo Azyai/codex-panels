@@ -336,6 +336,22 @@ function activate(context) {
   };
   refreshTree();
 
+  // 上报工作区根目录(官方扩展 webview 内的会话筛选按钮需要它)
+  const reportRoot = () => {
+    const root = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders[0]
+      ? vscode.workspace.workspaceFolders[0].uri.fsPath
+      : '';
+    if (root) {
+      fetch(BACKEND + '/workspace-root', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ root }),
+      }).catch(() => {});
+    }
+  };
+  reportRoot();
+  context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(reportRoot));
+
   // 筛选切换(树视图标题栏的筛选按钮触发)
   context.subscriptions.push(
     vscode.commands.registerCommand('codex-panels.setThreadFilter', async () => {
