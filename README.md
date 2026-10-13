@@ -1,6 +1,6 @@
 # codex-panels
 
-给 **OpenAI Codex 桌面版**(Microsoft Store)加侧栏扩展按钮 + 双向会话同步的开源补丁项目。
+给官方 Codex 桌面端加上终端、编辑器面板与 VS Code 双向会话同步的开源补丁。
 
 **功能**
 
