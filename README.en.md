@@ -30,7 +30,7 @@ Patches and injection code only — no official binaries are distributed.
 ## 🚀 Quick Start
 
 ```powershell
-git clone https://github.com/<your-username>/codex-panels
+git clone https://github.com/Azyai/codex-panels
 cd codex-panels
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
@@ -47,7 +47,7 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 <details>
 <summary><b>🤖 One-liner for any AI agent to install this for you</b></summary>
 
-> Clone this repository, then run `powershell -ExecutionPolicy Bypass -File install.ps1` and follow the prompts.
+> Run `git clone https://github.com/Azyai/codex-panels; cd codex-panels; powershell -ExecutionPolicy Bypass -File install.ps1` and follow the prompts.
 
 </details>
 

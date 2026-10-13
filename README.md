@@ -30,7 +30,7 @@
 ## 🚀 快速开始
 
 ```powershell
-git clone https://github.com/<你的用户名>/codex-panels
+git clone https://github.com/Azyai/codex-panels
 cd codex-panels
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
@@ -47,7 +47,7 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 <details>
 <summary><b>🤖 一句话让任意智能体帮你安装</b></summary>
 
-> 克隆本仓库后执行 `powershell -ExecutionPolicy Bypass -File install.ps1`,按提示完成即可。
+> 执行 `git clone https://github.com/Azyai/codex-panels; cd codex-panels; powershell -ExecutionPolicy Bypass -File install.ps1`,按提示完成即可。
 
 </details>
 
