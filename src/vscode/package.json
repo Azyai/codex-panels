@@ -1,0 +1,103 @@
+{
+  "name": "codex-chat",
+  "displayName": "Codex Chat (codex-panels)",
+  "publisher": "codex-panels",
+  "description": "在 VS Code 内置 Chat 面板里与 Codex 对话——模型、登录态、项目上下文复用 Codex 桌面端(codex-panels 注入版)",
+  "version": "0.2.0",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Chat"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": true
+    }
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codex-panels",
+          "title": "Codex 会话",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codex-panels": [
+        {
+          "id": "codex-panels.threads",
+          "name": "全部会话(实时)"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "codex-panels.codex",
+        "name": "codex",
+        "fullName": "Codex",
+        "description": "与 Codex 对话(复用 Codex 桌面端的模型与登录)",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "model",
+            "description": "查看 / 选择 Codex 模型"
+          },
+          {
+            "name": "effort",
+            "description": "查看 / 选择思考强度(全部档位)"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "codex-panels.selectModel",
+        "title": "Codex: 选择模型"
+      },
+      {
+        "command": "codex-panels.selectEffort",
+        "title": "Codex: 思考强度(低/中/高全部档位)"
+      },
+      {
+        "command": "codex-panels.continueThread",
+        "title": "Codex: 继续 Codex 中的会话"
+      },
+      {
+        "command": "codex-panels.openInCodex",
+        "title": "Codex: 在 Codex 中打开当前会话"
+      },
+      {
+        "command": "codex-panels.newThread",
+        "title": "Codex: 新建会话"
+      },
+      {
+        "command": "codex-panels.focusCodex",
+        "title": "Codex: 返回 Codex 主窗口"
+      },
+      {
+        "command": "codex-panels.setThreadFilter",
+        "title": "Codex: 筛选会话列表(当前项目/所有项目/普通对话)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codex-panels.setThreadFilter",
+          "when": "view == codex-panels.threads",
+          "group": "navigation@1"
+        }
+      ]
+    }
+  }
+}
