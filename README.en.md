@@ -14,6 +14,8 @@
 
 Patches and injection code only — no official binaries are distributed.
 
+![demo](docs/demo.gif)
+
 </div>
 
 ---
