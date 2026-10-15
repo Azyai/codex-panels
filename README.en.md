@@ -4,6 +4,8 @@
 
 **Open-source patches that add terminal & editor panels and bidirectional VS Code session sync to the official Codex desktop app**
 
+`终端 · 编辑器面板 · Codex 桌面端与 VS Code 双向会话同步(Windows)`
+
 [简体中文](README.md) | **English**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -70,6 +72,23 @@ The installer copies the official Codex app to a writable location, patches `app
 - Re-run `install.ps1 -Force` after an official Codex major update
 - The patched copy shares user data with the official Codex app — don't run both at once
 - This is an unofficial modification; primarily for personal use
+
+## ❓ FAQ
+
+**How do I add an editor / terminal to the Codex desktop app?**
+After installing codex-panels, two buttons appear in the official app's left rail: **Terminal** (toggle the built-in terminal panel) and **Open Editor** (launch native VS Code with the workspace following the active project).
+
+**Can Codex sync conversations with VS Code?**
+Yes — that's the core feature. Create or continue a conversation on either side and it appears on the other within 1–2 seconds, with models and login fully reusing the Codex desktop app.
+
+**Does it modify the official program?**
+No. The installer copies the official app to a writable location and patches only that copy. The original stays untouched, and this repo ships patches only — no official binaries.
+
+**Is it safe?**
+Models, login and quota all reuse the official Codex app; no credentials are touched and nothing extra is uploaded. It is an unofficial modification — mainly for personal use.
+
+**What happens after an official Codex update?**
+Re-run `install.ps1 -Force` to re-patch the new version; patches locate targets by content, not offsets.
 
 ## 📄 License
 

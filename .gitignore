@@ -2,3 +2,4 @@ asar-extract/
 *.log
 __pycache__/
 test/
+marketing/

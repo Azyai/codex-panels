@@ -4,6 +4,8 @@
 
 **给官方 Codex 桌面端加上终端、编辑器面板与 VS Code 双向会话同步的开源补丁**
 
+`Terminal · Editor · Bidirectional VS Code session sync for the OpenAI Codex desktop app (Windows)`
+
 **简体中文** | [English](README.en.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -70,6 +72,23 @@ tools/          开发调试工具(CDP 测试、协议探测、asar 提取)
 - 官方 Codex 大版本更新后需重跑 `install.ps1 -Force`
 - 扩展副本与官方 Codex 共享用户数据,两者不能同时运行
 - 属于非官方改造,自用为主
+
+## ❓ 常见问题
+
+**怎么给 Codex 桌面端添加编辑器 / 终端?**
+安装 codex-panels 后,官方 Codex 桌面端左侧栏会新增两个按钮:**终端**(打开 / 关闭官方终端面板)和**打开编辑器**(一键打开原生 VS Code,工作区自动跟随当前项目)。常被搜成「给 Codex 加编译器」,指的就是这个编辑器集成。
+
+**Codex 能和 VS Code 双向同步会话吗?**
+能,这是本项目的核心功能。任意一边创建或继续会话,另一边 1~2 秒内自动出现,无需手动刷新,模型与登录状态完全复用 Codex 本体。
+
+**会改动官方程序吗?**
+不会。安装脚本从本机官方 Codex 复制一份**可写副本**,只对副本打补丁;官方原版不动,仓库也只发布补丁代码、不分发任何官方二进制。
+
+**安全吗?**
+模型、登录、额度全部复用官方 Codex 本体,不碰账号密码、不额外上传数据。属于非官方改造,建议自用。
+
+**官方 Codex 大版本更新后怎么办?**
+重跑 `install.ps1 -Force` 对新版本重新打补丁即可,补丁按内容特征定位,不怕偏移变化。
 
 ## 📄 许可
 
