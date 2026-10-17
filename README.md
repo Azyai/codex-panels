@@ -2,7 +2,7 @@
 
 # codex-panels
 
-**给官方 Codex 桌面端加上终端、编辑器面板与 VS Code 双向会话同步的开源补丁**
+**使用第三方API时给官方 Codex 桌面端加上终端、编辑器面板与 VS Code 双向会话同步的开源补丁**
 
 `Terminal · Editor · Bidirectional VS Code session sync for the OpenAI Codex desktop app (Windows)`
 
